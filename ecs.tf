@@ -1,26 +1,3 @@
-// todo change prefix to prevent conflicts
-module "ecs_dockerhub_clone" {
-  source                  = "elasticscale/ecs-dockerhub-clone/aws"
-  version                 = "3.0.2"
-  docker_hub_username     = var.docker_hub_username
-  docker_hub_access_token = var.docker_hub_access_token
-  containers = {
-    // todo, version management
-    "cloudflare/cloudflared" = ["latest"],
-    "amazon/aws-cli"         = ["2.13.5"]
-  }
-  build_commands = {
-    "cloudflare/cloudflared:latest" = [
-      "VOLUME [\"/etc/cloudflared\"]"
-    ],
-    "amazon/aws-cli:2.13.5" = [
-      "RUN mkdir /etc/cloudflared",
-      "RUN chmod 777 /etc/cloudflared",
-      "VOLUME [\"/etc/cloudflared\"]"
-    ]
-  }
-}
-
 resource "aws_ecs_cluster" "main" {
   name = "${var.prefix}-cluster"
   setting {
@@ -52,8 +29,14 @@ resource "aws_ecs_task_definition" "main" {
       name      = "cloudflared"
       essential = true
       // todo, versioning
-      image   = "${module.ecs_dockerhub_clone.image_base_url}cloudflare/cloudflared:latest",
-      command = ["tunnel", "run", "--token", cloudflare_tunnel.tunnel.tunnel_token]
+      image   = "cloudflare/cloudflared:latest",
+      command = ["tunnel", "run", cloudflare_tunnel.tunnel.id]
+      secrets = [
+        {
+          name      = "TUNNEL_TOKEN",
+          valueFrom = aws_ssm_parameter.tunneltoken.arn
+        }
+      ]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -61,29 +44,8 @@ resource "aws_ecs_task_definition" "main" {
           awslogs-region        = data.aws_region.current.name
           awslogs-stream-prefix = "cloudflared"
         }
-      }
-      dependsOn = [
-        {
-          containerName = "awscli"
-          condition     = "SUCCESS"
-        }
-      ]
-    },
-    {
-      name      = "awscli"
-      essential = false
-      // todo, versioning
-      image   = "${module.ecs_dockerhub_clone.image_base_url}amazon/aws-cli:2.13.5"
-      command = ["s3", "sync", "s3://${aws_s3_bucket.main.id}/", "/etc/cloudflared/"]
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.logs.name
-          awslogs-region        = data.aws_region.current.name
-          awslogs-stream-prefix = "awscli"
-        }
-      }
-    }
+      }    
+    }   
   ])
 }
 
