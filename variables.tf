@@ -24,6 +24,9 @@ variable "ingress_rules" {
     path     = optional(string)
     service  = string
   }))
+  default = [{
+    service = "http_status:404"
+  }]
   description = "List of ingress rules to allow traffic to (see cloudflare_tunnel_config docs, access_block not supported right now)"
 }
 

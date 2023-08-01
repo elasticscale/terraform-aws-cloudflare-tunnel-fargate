@@ -23,18 +23,6 @@ module "tunnel" {
   private_subnets       = module.vpc.private_subnets
   cloudflare_zone       = var.cloudflare_zone
   cloudflare_account_id = var.cloudflare_account_id
-  ingress_rules = [
-    {
-      hostname = "example.com"
-      path     = "/api"
-      // this could now also be an address to an internal load balancer!
-      service = "http://localhost:8080"
-    },
-    // last one has to be a default rule without a hostname / path
-    {
-      service = "http_status:404"
-    }
-  ]
 }
 
 output "security_group_id" {
