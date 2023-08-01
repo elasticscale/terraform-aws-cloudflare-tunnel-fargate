@@ -2,11 +2,12 @@ provider "aws" {
   region = "eu-west-1"
 }
 
+// this is needed to prevent: 
+// Could not retrieve the list of available versions for provider hashicorp/cloudflare: provider registry registry.terraform.io does not have a provider named registry.terraform.io/hashicorp/cloudflare
 terraform {
   required_providers {
     cloudflare = {
-      source  = "registry.terraform.io/cloudflare/cloudflare"
-      version = "4.0.0"
+      source = "registry.terraform.io/cloudflare/cloudflare"
     }
   }
 }
@@ -16,13 +17,22 @@ provider "cloudflare" {
 }
 
 module "tunnel" {
-  source                  = "../../"
-  docker_hub_username     = var.docker_hub_username
-  docker_hub_access_token = var.docker_hub_access_token
-  vpc_id                  = module.vpc.vpc_id
-  private_subnets         = module.vpc.private_subnets
-  cloudflare_zone         = var.cloudflare_zone
+  source                = "../../"
+  vpc_id                = module.vpc.vpc_id
+  private_subnets       = module.vpc.private_subnets
+  cloudflare_zone       = var.cloudflare_zone
   cloudflare_account_id = var.cloudflare_account_id
+  ingress_rules = [
+    {
+      hostname = "example.com"
+      path     = "/api"
+      service  = "http://localhost:8080"
+    },
+    // last one has to be a default rule without a hostname / path
+    {
+      service = "http_status:404"
+    }
+  ]
 }
 
 // supporting resources
