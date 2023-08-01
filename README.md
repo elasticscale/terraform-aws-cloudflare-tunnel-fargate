@@ -30,7 +30,7 @@ After you connect to the WARP agent and whitelist the security group of this mod
 
 You can also use this module to give Zero Trust access to internal load balancers or other services. You need to then set the ingress rules and add a CNAME to the Cloudflare domain.
 
-[For more debugging steps check out the elasticscale blog.](https://elasticscale.cloud/en/get-a-free-vpn-into-your-aws-vpc-and-worldwide-performance-improvement-through-cloudflare-argo-tunnels/)
+[For more debugging steps check out the elasticscale blog.](https://elasticscale.cloud/en/get-a-free-vpn-into-your-aws-vpc-and-worldwide-performance-improvement-through-cloudflare-tunnels/)
 
 ## Requirements
 
