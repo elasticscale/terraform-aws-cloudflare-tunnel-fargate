@@ -38,7 +38,6 @@ resource "cloudflare_tunnel_config" "config" {
         hostname = ingress_rule.value.hostname
         path     = ingress_rule.value.path
         service  = ingress_rule.value.service
-        // todo, access block
       }
     }
   }

@@ -3,7 +3,8 @@ provider "aws" {
 }
 
 // this is needed to prevent: 
-// Could not retrieve the list of available versions for provider hashicorp/cloudflare: provider registry registry.terraform.io does not have a provider named registry.terraform.io/hashicorp/cloudflare
+// Could not retrieve the list of available versions for provider hashicorp/cloudflare: 
+// provider registry registry.terraform.io does not have a provider named registry.terraform.io/hashicorp/cloudflare
 terraform {
   required_providers {
     cloudflare = {
@@ -26,13 +27,26 @@ module "tunnel" {
     {
       hostname = "example.com"
       path     = "/api"
-      service  = "http://localhost:8080"
+      // this could now also be an address to an internal load balancer!
+      service = "http://localhost:8080"
     },
     // last one has to be a default rule without a hostname / path
     {
       service = "http_status:404"
     }
   ]
+}
+
+output "security_group_id" {
+  value = module.tunnel.security_group_id
+}
+
+output "tunnel_id" {
+  value = module.tunnel.tunnel_id
+}
+
+output "tunnel_cname" {
+  value = module.tunnel.tunnel_cname
 }
 
 // supporting resources

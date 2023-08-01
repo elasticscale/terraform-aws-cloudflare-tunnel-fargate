@@ -23,9 +23,8 @@ variable "ingress_rules" {
     hostname = optional(string)
     path     = optional(string)
     service  = string
-    // todo, access block
   }))
-  description = "List of ingress rules to allow traffic to (see cloudflare_tunnel_config docs)"
+  description = "List of ingress rules to allow traffic to (see cloudflare_tunnel_config docs, access_block not supported right now)"
 }
 
 variable "prefix" {
