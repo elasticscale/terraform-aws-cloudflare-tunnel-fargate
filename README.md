@@ -88,7 +88,6 @@ No modules.
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 | [aws_vpc.vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
-| cloudflare_zone.zone | data source |
 
 ## Inputs
 
@@ -96,7 +95,6 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_cloudflare_account_id"></a> [cloudflare\_account\_id](#input\_cloudflare\_account\_id) | Cloudflare account ID | `string` | n/a | yes |
 | <a name="input_cloudflare_version"></a> [cloudflare\_version](#input\_cloudflare\_version) | Cloudflare version to use, defaults to latest but best to pick a docker tag version to prevent issues | `string` | `"latest"` | no |
-| <a name="input_cloudflare_zone"></a> [cloudflare\_zone](#input\_cloudflare\_zone) | Domain name (NS must be connected and verified in Cloudflare) | `string` | n/a | yes |
 | <a name="input_cpu"></a> [cpu](#input\_cpu) | CPU units to allocate to each instance, defaults to 256, needs to be within Fargate configuration limits | `number` | `256` | no |
 | <a name="input_desired_count"></a> [desired\_count](#input\_desired\_count) | Number of instances to run initially, choose 3 or more for high availability across AZs | `number` | `3` | no |
 | <a name="input_fargate_type"></a> [fargate\_type](#input\_fargate\_type) | Use spot instances or regular instances (FARGATE\_SPOT or FARGATE), SPOT is much cheaper and does not really affect availability in this case | `string` | `"FARGATE_SPOT"` | no |

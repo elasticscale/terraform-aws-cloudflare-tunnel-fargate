@@ -1,7 +1,3 @@
-data "cloudflare_zone" "zone" {
-  name = var.cloudflare_zone
-}
-
 resource "random_password" "tunnel_secret" {
   length = 64
 }
@@ -13,7 +9,7 @@ resource "random_string" "suffix" {
 }
 
 resource "cloudflare_tunnel" "tunnel" {
-  account_id = data.cloudflare_zone.zone.account_id
+  account_id = var.cloudflare_account_id
   name       = "${var.prefix}-tunnel-${random_string.suffix.result}"
   secret     = base64encode(random_password.tunnel_secret.result)
 }
@@ -26,7 +22,7 @@ resource "cloudflare_tunnel_route" "route" {
 }
 
 resource "cloudflare_tunnel_config" "config" {
-  account_id = data.cloudflare_zone.zone.account_id
+  account_id = var.cloudflare_account_id
   tunnel_id  = cloudflare_tunnel.tunnel.id
   config {
     warp_routing {

@@ -3,11 +3,6 @@ variable "cloudflare_account_id" {
   description = "Cloudflare account ID"
 }
 
-variable "cloudflare_zone" {
-  type        = string
-  description = "Domain name (NS must be connected and verified in Cloudflare)"
-}
-
 variable "vpc_id" {
   type        = string
   description = "VPC ID"
